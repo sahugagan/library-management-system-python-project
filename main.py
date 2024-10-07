@@ -1,4 +1,4 @@
-# Importing all necessary modules
+
 import sqlite3
 from tkinter import *
 import tkinter.ttk as ttk
@@ -6,7 +6,7 @@ import tkinter.messagebox as mb
 import tkinter.simpledialog as sd
 from datetime import datetime, timedelta
 
-# Connecting to Database
+
 connector = sqlite3.connect('library.db')
 cursor = connector.cursor()
 
@@ -14,7 +14,7 @@ connector.execute(
     'CREATE TABLE IF NOT EXISTS Library (BK_NAME TEXT, BK_ID TEXT PRIMARY KEY NOT NULL, AUTHOR_NAME TEXT, BK_STATUS TEXT, CARD_ID TEXT, ISSUE_DATE TEXT)'
 )
 
-# Functions
+
 def issuer_card():
     return sd.askstring('Issuer Card ID', 'Enter the Issuer\'s Card ID:')
 
@@ -68,7 +68,7 @@ def remove_record():
     connector.commit()
     clear_fields(); display_records()
 
-# Issue Book Functionality
+
 def change_availability():
     if not tree.selection():
         mb.showerror('Error', 'Please select a book')
@@ -89,7 +89,7 @@ def change_availability():
     connector.commit()
     display_records()
 
-# Fine Calculation Function
+
 def calculate_fine():
     if not tree.selection():
         mb.showerror('Error', 'Please select a book')
@@ -109,7 +109,7 @@ def calculate_fine():
     else:
         mb.showinfo('Fine', 'No fine applicable')
 
-# Search Book
+
 def search_book():
     search_term = sd.askstring('Search Book', 'Enter Book Name or Book ID:')
     tree.delete(*tree.get_children())
@@ -117,19 +117,19 @@ def search_book():
     for record in cursor.fetchall():
         tree.insert('', END, values=record)
 
-# GUI Setup
+
 root = Tk()
 root.title('Library Management System')
 root.geometry('1010x530')
 
-# Initialize tkinter variables AFTER root is created
+
 bk_status = StringVar(); bk_name = StringVar()
 bk_id = StringVar(); author_name = StringVar()
 card_id = StringVar()
 
 Label(root, text='LIBRARY MANAGEMENT SYSTEM', bg='SteelBlue', fg='white', font=('Arial', 15, 'bold')).pack(side=TOP, fill=X)
 
-# Frames
+
 left_frame = Frame(root, bg='LightSkyBlue')
 left_frame.place(x=0, y=30, relwidth=0.3, relheight=0.96)
 
@@ -139,7 +139,6 @@ RT_frame.place(relx=0.3, y=30, relwidth=0.7, height=100)
 RB_frame = Frame(root, bg='DodgerBlue')
 RB_frame.place(relx=0.3, y=130, relwidth=0.7, relheight=0.84)
 
-# Left Frame Widgets
 Label(left_frame, text='Book ID:', font=('Georgia', 13), bg='LightSkyBlue').place(x=30, y=60)
 bk_id_entry = Entry(left_frame, textvariable=bk_id, font=('Times New Roman', 12))
 bk_id_entry.place(x=150, y=60)
@@ -158,12 +157,12 @@ Button(left_frame, text='Update Record', bg='SteelBlue', fg='white', font=('Gill
 Button(left_frame, text='Delete Record', bg='SteelBlue', fg='white', font=('Gill Sans MT', 13), command=remove_record).place(x=30, y=300)
 Button(left_frame, text='Clear Fields', bg='SteelBlue', fg='white', font=('Gill Sans MT', 13), command=clear_fields).place(x=30, y=340)
 
-# Right Frame Widgets
+
 Button(RT_frame, text='Search Book', bg='SteelBlue', fg='white', font=('Gill Sans MT', 13), command=search_book).place(x=50, y=30)
 Button(RT_frame, text='Change Availability', bg='SteelBlue', fg='white', font=('Gill Sans MT', 13), command=change_availability).place(x=200, y=30)
 Button(RT_frame, text='Calculate Fine', bg='SteelBlue', fg='white', font=('Gill Sans MT', 13), command=calculate_fine).place(x=400, y=30)
 
-# Table for displaying records
+
 tree = ttk.Treeview(RB_frame, columns=('Book Name', 'Book ID', 'Author', 'Status', 'Card ID', 'Issue Date'), show='headings')
 tree.heading('Book Name', text='Book Name')
 tree.heading('Book ID', text='Book ID')
